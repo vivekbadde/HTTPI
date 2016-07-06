@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>2&3</title>
+	<!-- Create a cacheFactory and perform info, put and get operation on it.
+         Create a cacheFactory and perform remove, remove all and destroy operation on it. --> 
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+    <script type="text/javascript">
+    	var mod = angular.module("myApp", []);
+    	mod.controller("myCtrl", function($scope, $cacheFactory){
+    	$scope.keys = [];
+    	$scope.cache = $cacheFactory('MyCache');
+    	$scope.put = function(key, value){
+    if(angular.isUndefined($scope.cache.get(key))){
+    	$scope.cache.put(key,value);
+    	$scope.keys.push(key);
+    }
+    $scope.remove = function(remCacheKey){
+    	$scope.cache.remove(remCacheKey);
+    } 
+   	$scope.removeAll = function(){
+   		$scope.cache.removeAll();
+    } 
+	$scope.destroy = function(){
+   		$scope.cache.destroy();
+   	}
+
+    	}
+    	});
+    </script>
+</head>
+<body ng-app="myApp">
+<br><br><br>
+<div class="container" ng-controller="myCtrl">
+	<table>
+	<tr> <td> <b>Enter key: </td> <td></b><input type="text" name="input1" ng-model="Key"> </td>
+
+
+	</tr> <br><br>
+	<tr> <td> <b>Enter value: </td> <td> </b><input type="text" name="input2" ng-model="Value"></td> </tr>
+	</table>
+	<button type="button" ng-click="put(Key, Value)">Cache</button>
+ 
+	<hr>
+	<h3> <u>Cached Items</u></h3>
+	<div>
+	<div ng-repeat="key in keys">
+	<span ng-bind="key"></span>:
+	<b ng-bind="cache.get(key)"></b>
+	</div>
+	</div>
+	<hr>
+	<h3> <u>Cache Information </u></h3> 
+	<div >
+	<div ng-repeat="(key, value) in cache.info()">
+	<span ng-bind="key"></span>:
+	<b ng-bind="value"></b>
+</div>
+	</div>
+	<hr>
+	<h3><u>Delete Operations</u></h3>
+	<br>
+	<div>
+		<b>Enter key: </b><input type="text" name="input2" ng-model="remCacheKey">
+		<button type="button" ng-click="remove(remCacheKey)">Remove</button>
+		<br><br>
+		<button type="button" ng-click="removeAll()">RemoveAll</button>
+		<button type="button" ng-click="destroy()">Destroy</button>
+	</div>
+</div>
+</body>
+</html>
